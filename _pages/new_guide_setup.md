@@ -119,6 +119,8 @@ Only rename a folder/guide when absolutely needed as a result of product change.
    6. Click **Edit title**.
    7. Change the name and the URL fragment. Keep URL fragment in lowercase.
    8. Click **Rename** to save.
-   9. When links and files/folders are all changed, as well as titles, run a build.
+   9. Select the drop-downn error for the book and click **Edit Configuration**.
+   10. Update the _Content Directory_ field with the new name of the folder.
+   11. When links and files/folders are all changed, as well as titles, run a build.
    
 
