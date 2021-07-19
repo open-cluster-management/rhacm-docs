@@ -11,7 +11,9 @@ Configuration policies support the inclusion of Golang text templates in the obj
 [#template-functions]
 == Template functions
 
-Template functions, such as resource-specific and generic, `lookup` template functions, are available for referencing Kubernetes resources on the cluster. The resource-specific functions are used for convenience and make content of the resources more accessible. If you use the generic function, `lookup`, which is more advance, it is best to be familiar with the YAML structure of the resource that is being looked up. In addition to these functions, utility functions like `base64encode`, `base64decode`, `indent`, etc. are also available.
+Template functions, such as resource-specific and generic, `lookup` template functions, are available for referencing Kubernetes resources on the cluster. The resource-specific functions are used for convenience and make content of the resources more accessible. If you use the generic function, `lookup`, which is more advance, it is best to be familiar with the YAML structure of the resource that is being looked up. In addition to these functions, utility functions like `base64encode`, `base64decode`, `indent`, `toInt`, `toBool` etc. are also available.
+
+To conform to yaml syntax, templates needs to be set in the policy resource as strings using quotes or block char ( | or >), see examples below.  This causes the resolved template value to also be a String, to override this consider using toInt or toBool as the final function in the template to trigger further processing that will force the value to be interpreted as integer or bool.
 
 Continue reading to view descriptions and examples for some of the custom template functions that are supported:
 
@@ -99,8 +101,7 @@ spec:
         app-name: sampleApp
         app-description: "this is a sample app"
         log-file: '{{ fromConfigMap "default" "logs-config" "log-file" }}'
-        log-level: |
-          {{with (fromConfigMap "default" "logs-config" "log-level") }} {{ . }} {{else}} ERROR {{end}}
+        log-level: '{{ fromConfigMap "default" "logs-config" "log-level")}}'
   remediationAction: enforce
   severity: low
 ----
@@ -153,7 +154,7 @@ spec:
 The `lookup` function returns the Kubernetes resource as a JSON compatible map. View the following syntax for the function:
 
 ----
-func lookup (apiversion string, kind string, namespace string, name string) (value string, err Error)
+func lookup (apiversion string, kind string, namespace string, name string) (value map[string]interface{}, err Error)
 ----
 
 When you use the function, enter the API version, kind, namespace, and name of the Kubernetes resource. View the following example of the configuration policy that enforces a Kubernetes resource on the target managed cluster. The value for the `metrics-url` data key is a template that retrieves the `v1/Service` Kubernetes resource `metrics` from the `default` namespace, and is set to the value of the `Spec.ClusterIP` in the queried resource:
@@ -287,6 +288,68 @@ spec:
         {{ ( index ( lookup "v1" "Secret" "default" "mycert-tls"  ).data  "ca.pem"  ) |  base64dec | indent 4  }}
 ----
 
+[#toInt-function]
+=== _toInt_ function
 
+The `toInt` function casts and returns the integer value of the input value. Also, when this is the last function in the template, it triggers further processing of the source content to ensure the value is interpreted by yaml as an integer. View the following syntax for the function:
 
+----
+func toInt (input interface{}) (output int)
+----
 
+When you use the function, enter the data that needs to be casted to int. View the following example of the configuration policy that uses the `toInt` function:
+
+[source,yaml]
+----
+apiVersion: policy.open-cluster-management.io/v1
+kind: ConfigurationPolicy
+metadata:
+  name: demo-template-function
+  namespace: test
+spec:
+  namespaceSelector:
+    exclude:
+    - kube-*
+    include:
+    - default
+  object-templates:
+  - complianceType: musthave
+    objectDefinition:
+    ...
+    spec:
+      vlanid:  |
+        {{ (fromConfigMap "site-config" "site1" "vlan")  | toInt }}
+----
+
+[#toBool-function]
+=== _toBool_ function
+
+The `toBool` function converts the input string into a boolean and  returns the bool. Also, when this is the last function in the template, it triggers further processing of the source content to ensure the value is interpreted by yaml as boolean. View the following syntax for the function:
+
+----
+func toBool (input string) (output bool)
+----
+
+When you use the function, enter the string data that needs to be converted to bool. View the following example of the configuration policy that uses the `toBool` function:
+
+[source,yaml]
+----
+apiVersion: policy.open-cluster-management.io/v1
+kind: ConfigurationPolicy
+metadata:
+  name: demo-template-function
+  namespace: test
+spec:
+  namespaceSelector:
+    exclude:
+    - kube-*
+    include:
+    - default
+  object-templates:
+  - complianceType: musthave
+    objectDefinition:
+    ...
+    spec:
+      enabled:  |
+        {{ (fromConfigMap "site-config" "site1" "enabled")  | toBool }}
+----
