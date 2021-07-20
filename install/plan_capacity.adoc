@@ -1,7 +1,7 @@
 [#sizing-your-cluster]
 = Sizing your cluster
 
-Each {product-title} cluster is unique. There are guidelines that provide sample deployment sizes. Recommendations are classified by size and purpose. {product-title-short} applies the following three dimensions for sizing and placement of supporting services:
+Each {product-title} cluster is unique. Guidelines provide sample deployment sizes. Recommendations are classified by size and purpose. {product-title-short} applies the following three dimensions for sizing and placement of supporting services:
 
 * Availability Zones isolate potential fault domains across the cluster. Typical clusters should have nearly equivalent worker node capacity in three or more availability zones. 
 
@@ -9,7 +9,7 @@ Each {product-title} cluster is unique. There are guidelines that provide sample
 
 * Memory reservations and limits establish memory capacity on a worker node to assign to a container. Reservations establish a _lower_ bound of CPU or memory, and limits establish an _upper_ bound.
 
-The persistent data managed by the product is stored in the etcd cluster used by Kubernetes. *Best practice:* For OpenShift, distribute the master nodes of the cluster across three (3) availability zones.
+* The persistent data managed by the product is stored in the etcd cluster used by Kubernetes. *Best practice:* For {ocp}, distribute the master nodes of the cluster across three (3) availability zones.
 
 **Note:** The following requirements are not minimum requirements.
 
@@ -27,7 +27,7 @@ The persistent data managed by the product is stored in the etcd cluster used by
 In addition to {product-title-short}, the {ocp} cluster runs additional services to support cluster features. The following node sizes (3 nodes of the types noted in the information that follows, distributed evenly across 3 availability zones) are recommended.
 
 [#openshift-cluster-on-amazon-web-services]
-=== OpenShift cluster on Amazon Web Services
+=== {ocp-short} on Amazon Web Services
 
 See the https://docs.openshift.com/container-platform/4.7/installing/installing_aws/installing-aws-customizations.html#installing-aws-customizations[Amazon Web Services information in the {ocp-short} product documentation] for more information.
 Also learn more about https://aws.amazon.com/ec2/instance-types/m5/[machine types].
@@ -80,6 +80,24 @@ See the following https://docs.openshift.com/container-platform/4.6/installing/i
  ** CPUs: 4
  ** Memory: 16 GB
  ** Storage size: 120 GB
+ 
+ [#openshift-cluster-on-power-systems]
+=== {ocp-short} on IBM Power systems (Technology Preview)
+
+See https://access.redhat.com/documentation/en-us/openshift_container_platform/4.8/html-single/installing/index#installing-on-ibm-power-systems[Installing a cluster on Power systems] in the {ocp-short} documentation for more information.
+
+* Node count: 3 								
+* Instance size:
+** Memory: 16 GB
+** Storage size: 120 GB
+** vCPU: 16
++
+IBM Power systems provide the ability to configure simultaneous multithreading (SMT), which extends the number of vCPUs that can run on each core. If you configured SMT, your SMT level determines how you satisfy the 16 vCPU requirement. The most common configurations are:
++
+*** Two cores running on SMT-8 (the default configuration for systems that are running IBM PowerVM) provides the required 16 vCPUs.
+*** Four cores running on SMT-4 provides the required 16 vCPUs. 
++
+For more information about SMT, see https://www.ibm.com/docs/en/aix/7.2?topic=concepts-simultaneous-multithreading[Simultaneous multithreading].
 
 [#openshift-cluster-on-bare-metal]
 === OpenShift cluster on bare metal

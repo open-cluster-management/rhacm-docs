@@ -28,7 +28,7 @@ To install `kubectl`, see _Install and Set Up kubectl_ in the https://kubernetes
 [#supported-architecture]
 == Supported architectures
 
-* Linux (x86_64, s390x)
+* Linux (x86_64, s390x, ppc64le)
 * macOS
 
 [#prepare-for-import]
