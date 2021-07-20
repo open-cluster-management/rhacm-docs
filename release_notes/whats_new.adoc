@@ -30,10 +30,9 @@ Learn more about what is new this release:
 == Web console
 
 * New navigation --Brandi will add
-
-* **Technology Preview:** You can access Visual Web Terminal both the navigation and the header. 
-  - Visual Web Terminal: keep the updates here (new function only that he wants to highlight) status grid and scrolling
-
+* **Technology Preview:** You can access Visual Web Terminal from both the navigation and the header. 
+// - Visual Web Terminal: keep the updates here (new function only that he wants to highlight) status grid and scrolling
+  - Resource details are now availble in a split screen that supports scrolling through the history of the different resource details. See link:../console/vwt.adoc#starting-a-session[Starting a session] for more information.
 * You are now directed to the _Applications_ page after you select an application to view from the _Search_ page. See link:../console/search.adoc#search-argo[Query ArgoCD applications] for more information.
 
 [#observability-whats-new]
