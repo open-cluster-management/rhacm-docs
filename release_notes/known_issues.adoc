@@ -117,6 +117,12 @@ For more information, see link:../observability/observability_enable.adoc#enabli
 [#cluster-management-issues]
 == Cluster management known issues
 
+[#no-reassign-cluster-label]
+=== Cannot reassign a cluster to cluster set by changing label
+//2.2.3:14408
+
+You cannot reassign a cluster or cluster set from one cluster set to another by updating the label for the cluster to the new cluster set. To move a cluster or cluster set to another one, remove it from the cluster set by using the {product-title-short} console. After you remove it from the cluster set, add it to the new cluster set by using the console. 
+
 [#no-ansible-power-hub]
 === Cannot use Ansible Tower integration with an IBM Power hub cluster
 // 2.3:13523
